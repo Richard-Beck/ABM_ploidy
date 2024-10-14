@@ -1,0 +1,381 @@
+---
+title: "Unit_tests"
+output: html_document
+date: "2024-04-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load necessary libraries and packages
+```{r cars}
+
+library(ggplot2)
+library(data.table)
+library(tidyverse)
+library(dplyr)
+library("ggpubr")
+library(rgl)
+library("spatstat.geom") 
+library(plotly)
+#install.packages("scatterplot3d") # Install
+library("scatterplot3d") # load
+install.packages("collapse")
+library(reshape2)
+library(Matrix)
+library(gtools) 
+library(abind)
+
+
+xDim=200
+yDim=200
+diploid<-c(2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2)
+
+
+```
+
+
+
+ Spatial- and Karyotype-distance analysis:  cell-to-cell  at one time point
+ 1.Input data contains cell locations and corresponding karyotype in the form (x,y c1,c2,c3,...,c22) collected at the final time point
+
+```{r pressure, echo=FALSE}
+
+cellKaryotypeData<-as.matrix(read.csv("/Users/john/Documents/IMO/ploidy_abm/output/200-karyotype_Location.csv",header=FALSE))
+#Isolate all locations with no cells
+m=c()
+for(i in 1:nrow(cellKaryotypeData)){
+  #if both x and y coordinates are zero, then there is no cell there, remove
+  if(cellKaryotypeData[i,1]==0 && cellKaryotypeData[i,2]==0){
+    #Collect zero indexes
+    m<-c(m,i)
+  }
+}
+#Remove zero indexed rows (without a cell)
+cellKaryotypeData<-cellKaryotypeData[-m,]
+columnNames<-c("x","y","C1","C2","C3","C4","C5","C6","C7","C8","C9","C10",
+               "C11","C12","C13","C14","C15","C16","C17","C18","C19","C20","C21","C22")
+colnames(cellKaryotypeData)<- columnNames
+
+#Select a subset of data (Size is too large)
+index<-seq(1,nrow(cellKaryotypeData),4)
+cellKaryotypeData<-cellKaryotypeData[index,]
+
+manhattanDistance <- function(vect1, vect2){
+  dist <- abs(vect1 - vect2)
+  dist <- sum(dist)
+  return(dist)
+}
+
+
+#Represent data as a n-by-2 matrix whose 1st column contains PAIRWISE spatial dts and 2nd column has corresponding  karyotype dist btn cells
+
+spatialDistBtnCells<-dist(cellKaryotypeData[,1:2], method = "euclidean", diag = FALSE, upper = FALSE)
+karyotypeDistBtnCells<-dist(cellKaryotypeData[,3:24], method = "manhattan", diag = FALSE, upper = FALSE)
+
+paired_distances<-t(rbind(c(spatialDistBtnCells),c(karyotypeDistBtnCells)))
+
+
+
+
+paired_distances_DF<-data.frame(paired_distances)
+col<-c("spatial_dts","karyotype_dts")
+colnames(paired_distances_DF)<-col
+
+#Aggregate over spatial dist
+z1 <- aggregate(list(karyotype_dts=paired_distances_DF$karyotype_dts),
+                by=list(spatial_dts=paired_distances_DF$spatial_dts),
+                mean)
+
+
+z2 <- aggregate(list(karyotype_dts=paired_distances_DF$karyotype_dts),
+                by=list(spatial_dts=paired_distances_DF$spatial_dts),
+                function(q){
+                  mean(q==0)
+                })
+
+
+
+correlation<-round(cor(z1$spatial_dts,z1$karyotype_dts),3)
+cor_coef<-paste("r =",correlation)
+
+p1 <- ggplot(z1,aes(x=spatial_dts))+
+  geom_point(mapping=aes(y=karyotype_dts,color="Karyo dts"))+
+  geom_vline(xintercept=(+10),color="blue",lty=2)+
+  #geom_text(aes(x=62,y=1.7,label=paste("r =",correlation)))+
+  labs(x="Spatial distance",y="Mean karyotype dist.",title=paste("Cell-to-cell: Spatial distance vs karyotype distance, t=200\n "  ,"(",cor_coef,")"))
+
+p1
+
+
+dist_under10<-z1[z1$spatial_dts<10,]
+cor_coef10<-paste("r =",round(cor(dist_under10$spatial_dts,dist_under10$karyotype_dts),3))
+
+p2<-ggplot(dist_under10,aes(x=spatial_dts))+
+  geom_point(mapping=aes(y=karyotype_dts,color="Karyo dts"))+
+  geom_vline(xintercept=(+10),color="blue",lty=2)+
+  geom_smooth(aes(y=karyotype_dts))+
+  labs(x="Spatial distance (Under 10)",y="Mean karyotype dist.",title=paste("Cell-to-cell: Spatial distance vs karyotype distance, t=200 \n "  ,"(",cor_coef10,")"))
+
+p2+theme(text=element_text(size=12))
+
+p3 <- ggplot(z2,aes(x=spatial_dts))+
+  geom_point(mapping=aes(y=karyotype_dts,color="Karyo dts"))+
+  geom_vline(xintercept=(+10),color="blue",lty=2)+
+  #geom_text(aes(x=62,y=1.7,label=paste("r =",correlation)))+
+  labs(x="Spatial distance",y="prob. that karyotypes x-dist apart are identical",title="Fraction of  karyotypes  identical at a given spatial dist "  )
+
+p3
+
+g<-ggarrange(p1,p2,p3,nrow=2,ncol=2)
+annotate_figure(g, top = text_grob("Cell-to-cell: Spatial dist. vs karyotype dist.", 
+                                   color = "blue", face = "bold", size = 14))
+
+```
+
+
+Response to spatial-karyotype distance correlation to mis-segregation
+
+```{r}
+
+#Correlation values from  simulations with different mis-segregation rates are recorded for real data and random data initialization
+cor_randomData<- c(0,0.617,0.36,0.43,0.684,0.716,0.72,0.733,0.723,0.739)
+cor_realData <- c(0.978,0.983,0.98,0.982,0.975,0.972,0.963,0.949,0.942,0.94)
+mis_rate<-c(0,0.001,0.0015,0.0025,0.05,0.1,0.2,0.3,0.4,0.5)
+
+cor_df<-data.frame(mis_rate)
+cor_df$realData<-cor_realData
+cor_df$randomData<-cor_randomData
+
+b<-ggplot(cor_df,aes(x=mis_rate))+
+  geom_point(mapping=aes(y=realData,color="realData"),size=3)+
+  geom_smooth(mapping=aes(y=realData,color="realData"))+
+  geom_point(mapping=aes(y=randomData,color="randomData"),size=3)+
+  geom_smooth(mapping=aes(y=randomData,color="randomData"),method=NULL,se=FALSE)+
+  labs(x="Mis-segregation Rate",y="Correlation coefficient",title=paste("Mis_rate against Space-karyotype dist. correlation"))+
+  theme(text=element_text(size=14))
+b
+
+
+```
+
+
+
+
+The next chunk analyses Spatial- and Karyotypic-distances  spot-wise
+
+
+
+
+```{r}
+
+Space_karyo_Data<-as.matrix(read.csv("/Users/john/Documents/IMO/ploidy_abm/100_Spatial_karyo_dts.csv",header=FALSE)) # data
+Space_karyo_Data<-matrix(as.numeric(Space_karyo_Data[-1,]),ncol=3)
+
+columnNames<-c("Distance_btn_regions","Avg_dts_btn_spots","Max_Karyotype_dts")
+colnames(Space_karyo_Data)<-columnNames
+Space_karyo_DF<-data.frame(Space_karyo_Data)
+
+#remove rows with N/A data
+Space_karyo_DF<-Space_karyo_DF[!is.na(Space_karyo_DF$Avg_dts_btn_spots),]
+
+
+Space_karyo_DF<-aggregate(list(Max_Karyotype_dts=Space_karyo_DF$Max_Karyotype_dts),
+                         by=list(Avg_dts_btn_spots=Space_karyo_DF$Avg_dts_btn_spots),
+                         mean)
+
+
+
+Space_karyo_DF<-Space_karyo_DF[Space_karyo_DF$Avg_dts_btn_spots<75,]
+
+ggplot(Space_karyo_DF, aes(x=Avg_dts_btn_spots)) +
+  geom_point(mapping=aes(y=Max_Karyotype_dts,colour="Max Karyo dts"),size=2)+
+  labs(x="Distance between spots", y="Max. Karyotype between spotes",title="Spotwise comparison: Initialized with data, t_n=500")
+
+
+cor(Space_karyo_DF$Avg_dts_btn_spots,Space_karyo_DF$Max_Karyotype_dts)
+
+r12<-Space_karyo_DF
+
+rdf<-r12
+rdf$Avg_dts_btn_spots<-mean(r12$Avg_dts_btn_spots,r12$Avg_dts_btn_spots,r12$Avg_dts_btn_spots)
+rdf$Max_Karyotype_dts<-mean(r12$Avg_dts_btn_spots)
+
+
+
+ggplot(r12, aes(x=Avg_dts_btn_spots)) +
+  geom_point(mapping=aes(y=Max_Karyotype_dts,colour="Max Karyo dts"))+
+  geom_smooth(aes(y=Max_Karyotype_dts),method = "lm", se = FALSE)+
+  #geom_line(aes(y=Max_Karyotype_dts))+
+  labs(x="Distance between spots", y="Max. Karyotype between spotes",title="Spotwise comparison: Initialized with real data, t_n=100")
+```
+
+
+ Vessel distance  vs density and diversity analysis
+ Spots are selected and  the density, diversity and distance from nearest  vessel data is collected from each spot
+ 
+ 
+```{r}
+setwd("/Users/john/Documents/IMO/ploidy_abm")
+DistanceDensityData<-as.matrix(read.csv("/Users/john/Documents/IMO/ploidy_abm/100_DistanceDensity.csv",header=FALSE))
+DistanceDensityData<-matrix(as.numeric(DistanceDensityData[-1,]),ncol=6) 
+
+
+
+sites<-seq(1,nrow(DistanceDensityData))
+DistanceDensityData<-cbind(sites,DistanceDensityData)
+
+
+columnNames<-c("Site","x","y","Avg_spatial_Dist","Density","Diversity","Avg_Karyotype_Dist")
+colnames(DistanceDensityData)<-columnNames
+
+DistanceDensity_DF<-as.data.frame(DistanceDensityData)
+  
+DistanceDensity_DF<-DistanceDensity_DF[!is.na(DistanceDensity_DF$Avg_spatial_Dist),] #remove rows with N/A  measurements                             
+                         
+
+ggplot(DistanceDensity_DF, aes(x=Avg_spatial_Dist)) +
+  geom_smooth(mapping=aes(y=Density,colour="Density"),method=lm, se=FALSE)+
+  geom_point(mapping=aes(y=Density,colour="Density"))+
+  #geom_smooth(aes(y=Density,colour="Density"),method=lm, se=FALSE)+
+  #geom_smooth(mapping=aes(y=Diversity,colour="Diversity")+
+  geom_point(mapping=aes(y=Diversity,colour="Diversity"))+
+  geom_smooth(aes(y=Diversity,color="Diversity"),method=lm, se=FALSE)+
+  labs(x="Distance from vessel", y="Cell Density/Diversity",title="Distance vs density/Diversity: Real data, t_n=100 ")  
+
+```
+ 
+ 
+ Spatial Autocorrelation: This test the spatial relatedness of karyotype distribution
+ Hytpothesis is that spatial close clones are also genetically close
+ 
+ 
+```{r}
+
+  library(sp)
+  library(spdep)
+  #Set working direction to load data from
+  setwd("/Users/john/Documents/IMO/ploidy_abm/output")
+  
+SAData<-as.matrix(read.csv("/Users/john/Documents/IMO/ploidy_abm/output/200-karyotype_Location.csv",header=FALSE))
+
+#remove empty locations
+m=c()
+for(i in 1:nrow(SAData)){
+  #if both x and y coordinates are zero, then there is no cell there, remove
+  if(SAData[i,1]==0 && SAData[i,2]==0){
+    #Collect zero indexes
+    m<-c(m,i)
+  }
+}
+  SAData<-SAData[-m,]
+  
+#Extract unique karyotypes in the data
+  UniqueKaryotype<-unique(SAData[,3:24])
+  unique_index<-seq(1,nrow(UniqueKaryotype))
+  UniqueKaryotype<-cbind(unique_index,UniqueKaryotype) #assign unique index to each unique karyotype
+
+  featureData<-matrix(nrow=nrow(SAData),ncol=3)# holds cell location (x,y) and unique attribute (karyotype identifier)
+  featureData[,1:2]<-SAData[,1:2]
+  
+  for(k in 1:nrow(SAData)){
+    for(j in 1:nrow(UniqueKaryotype)){
+      if(identical(SAData[k,3:24],UniqueKaryotype[j,2:23])){
+        featureData[k,3]<-UniqueKaryotype[j,1]
+        break
+      }
+    }
+  }
+  
+df<-data.frame(featureData)
+  
+ggplot(df, aes(x = X1,y=X2))+
+  geom_point(aes(color=X3))+
+  labs(x="xDim",y="yDim")
+
+#set longitude and latittude values for define=ing polygons
+
+
+
+
+
+
+
+# Define the coordinates for each point (x, y)
+points <- cbind(df$X1, df$X2)  # Example coordinates
+
+# Create a list to store Polygons objects
+polygons <- vector("list", length = nrow(points))
+
+# Create Polygons objects for each point
+for (i in 1:nrow(points)) {
+  point <- points[i, ]
+  polygon <- Polygons(list(Polygon(matrix(point, nrow = 1))), ID = as.character(i))
+  polygons[[i]] <- polygon
+}
+
+# Create a SpatialPolygons object from the list of Polygons objects
+spatial_polygons <- SpatialPolygons(polygons)
+
+# Plot the polygons
+#plot(spatial_polygons, col = rainbow(nrow(points)), main = "Polygons with Single Points")
+
+plot(spatial_polygons, border = "red", lwd = 2, main = "Edges of Polygons Defined by Single Points/cell locations")
+
+#Fill inside of polygons
+for(i in 1:nrow(points)){
+  points(points[i,1], points[i,2], col = "purple", pch = 20)  # Plot the single point
+}
+
+
+
+#Adding the desired attribute
+spatial_polygons$karyo<-df$X3
+
+#spatial_polygons<-df
+# Define a distance threshold for neighbors
+distance_threshold <- 1 
+
+# Compute neighbors based on distance
+nb <- knn2nb(knearneigh(coordinates(spatial_polygons), k = 1))
+
+# Adjust neighbors based on distance threshold
+nb <- dnearneigh(coordinates(spatial_polygons), 0, distance_threshold)
+
+# Construct spatial weights matrix
+w <- nb2listw(nb, style = "B")
+
+# Perform Moran's test (example)
+# Assuming you have a variable 'karyo' associated with each point
+
+moran_result <- moran.test(spatial_polygons$karyo, listw = w)
+
+# View the Moran's test results
+print(moran_result)
+
+#Extract the spatially lagged values for each region
+spatial_polygons$lag <- lag.listw(w, spatial_polygons$karyo)
+
+#Plot lagged values against karyotype numbers
+M <- lm(lag ~ karyo, spatial_polygons)
+
+plot( lag ~ karyo, spatial_polygons, xlim=c(-5,200),pch=21, las=1,  col = "grey40", bg="grey80",
+      main="Attribute: Karyotype vs spatially Lagged values",xlab="Karyotype",ylab="spatially lagged values")
+ abline(M, col="blue",lwd=3) # Add the regression line from model M
+ abline(v = mean(spatial_polygons$karyo), lty=5, col = "green")
+ abline(h = mean(spatial_polygons$karyo), lty=5, col = "red")
+ legend(150, 500, legend=c("Reg", "Mean karyotype"),
+        col=c("blue", "red"), lty=1:2, cex=0.7)
+ 
+ #Computing Moran's coefficient
+ moran(spatial_polygons$karyo, listw = w, n = length(nb), S0 = Szero(w))
+ 
+ #Test for significance : Monte carlo 
+ MC<- moran.mc(spatial_polygons$karyo, w, nsim = 999)
+ MC
+ plot(MC,col="red",main="",xlab="Karyotype",las=1)
+ 
+ 
+```
+ 

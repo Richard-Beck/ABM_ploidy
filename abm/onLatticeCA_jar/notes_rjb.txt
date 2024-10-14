@@ -1,0 +1,38 @@
+1) I wasn't sure about the mis-segregation routine & I left some comments about this in Cell.java
+
+**********
+That is correct, there was a minor issue regarding how I handled my arrays . I resolved it and it should be working now. 
+**********
+
+2 )You have a lot of functions as members of the OnLatticeGrid class that probably shoudlnt be there and which makes it 
+hard to comprehend how the code is organized. It would be better to define classes/objects and assign relevant functions to
+each one as far as possible. For example, StepCells() makes sense remaining as a member function of OnLatticeGrid, but 
+ConfigureVisualisation() could become a member of a visualisation class etc. 
+3) High level loops should be kept as clean as possible. For example main(), run(), & StepCells() are all very long which 
+makes it hard to understand the flow of logic. For example with some careful thought StepCells should be able to look like:
+
+public void StepCells() {
+    ShuffleAgents(rn); //shuffle order of for loop iteration over cells
+    for (Cell c : this) { 
+		if(rn.Double()<drugKillProportion * currDrugConcentration * (1 - c.resistance)){
+			c.die();
+			continue;
+		}
+		double totPropensity= (c.divisionRate+c.movementRate+c.deathRate)*dt;
+		double r = rn.Double();
+		if (r < ((c.divisionRate * dt) / totPropensity)) {
+			c.divide();
+		} else if (...) {
+			c.move();
+		} else if (...) {
+			c.die();
+		} 
+	}
+}
+
+
+
+********
+I agree, the code could benefit from a little re-organizing, there are also a few redundant lines and comments that will be taken out to make it cleaner.  This is is the next line of action once the basic functionalities are working and is able to output expected data. 
+*********
+
