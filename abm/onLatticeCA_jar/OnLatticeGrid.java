@@ -25,7 +25,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
 
     Params Params = new Params();
-    Params par = new Params();
+
 
     int TotalRun=0;
     ArrayList<Double[]> max_deltas = new ArrayList<>();
@@ -162,7 +162,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
         Params Params = new Params();
         Params.load(path2Params);
-        //Params.readParameters(path2Params);
+
 
 
 
