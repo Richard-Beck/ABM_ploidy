@@ -203,3 +203,4 @@ public class OnLatticeModel implements Runnable {
         System.exit(exitCode);
     }
 }
+

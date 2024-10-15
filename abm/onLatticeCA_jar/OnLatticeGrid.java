@@ -25,7 +25,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
 
     Params Params = new Params();
-    Params par;
+    Params par = new Params();
 
     int TotalRun=0;
     ArrayList<Double[]> max_deltas = new ArrayList<>();
@@ -161,7 +161,9 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         String outputPath = args[1]; //"C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy/output";
 
         Params Params = new Params();
-        Params.readParameters(path2Params);
+        Params.load(path2Params);
+        //Params.readParameters(path2Params);
+
 
 
         InitialPopulationType=Params.InitialPopulationType;

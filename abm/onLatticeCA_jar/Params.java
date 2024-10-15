@@ -4,6 +4,7 @@ import HAL.Util;
 
 import java.io.*;
 import java.util.*;
+import java.lang.reflect.Field;
 
 public class Params {
 
@@ -187,6 +188,43 @@ public class Params {
 
     //
 
+    public void load(String filename) {
+        Map<String, String> params = new HashMap<>();
+
+        // Read the file line by line
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s+"); // Split by spaces or tabs
+                if (parts.length == 2) {
+                    params.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Update the fields using reflection
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            try {
+                Field field = this.getClass().getDeclaredField(entry.getKey());
+                field.setAccessible(true);
+
+                // Check the field type and parse accordingly
+                if (field.getType() == int.class) {
+                    field.setInt(this, Integer.parseInt(entry.getValue()));
+                } else if (field.getType() == double.class) {
+                    field.setDouble(this, Double.parseDouble(entry.getValue()));
+                } else if (field.getType() == boolean.class) {
+                    field.setBoolean(this, Boolean.parseBoolean(entry.getValue()));
+                } else if (field.getType() == String.class) {
+                    field.set(this, entry.getValue());
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                System.out.println("Warning: No matching field found for parameter: " + entry.getKey());
+            }
+        }
+    }
 
 
     public static Map<String, Object> readValuesFromFile(String filePath) {
