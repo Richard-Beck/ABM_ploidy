@@ -28,3 +28,4 @@ imageFrequency 20
 writeFrequency 20
 diffusion_tol 0.001
 runGUI 1
+path2Vessels C:\Users\4473331\Documents\projects\008_birthrateLandscape\ABM_ploidy\input\vessels.txt

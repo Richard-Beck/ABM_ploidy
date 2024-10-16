@@ -3,7 +3,10 @@ import HAL.GridsAndAgents.PDEGrid2D;
 import HAL.Gui.UIGrid;
 import HAL.Tools.FileIO;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
@@ -76,40 +79,31 @@ public class Resources {
 
 
 
-     static int[][] vessels=new int[Params.nvessels][2];//=new int[Params.nvessels][2];
+     int[][] vessels;//=new int[Params.nvessels][2];//=new int[Params.nvessels][2];
 
+    public void initialize_vessels(String path2Vessels){
+        List<int[]> rowsList = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(path2Vessels))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split("\\s+");  // Split by spaces or tabs
+                int[] row = new int[values.length];    // Create a row array
 
+                // Convert each string value to an integer
+                for (int i = 0; i < values.length; i++) {
+                    row[i] = Integer.parseInt(values[i]);
+                }
 
-    public void InitialO2Concentrations() throws Exception {
-        //Use to read specific user initial oxygen conccentration to initialize simulation
-        List<List<Double>> ves = helperMethods.readMatrixFromFile(onlatticeGrid.mainDir.concat("/input/oxygen.txt"));//Reads vessel  data as list
-        int[][] O2  = ves.stream().map(x -> x.stream().mapToInt(Double::intValue).toArray()).toArray(int[][]::new); //converts vessel data to matrix
-
-        double[][] InitialO2Conc=new double[O2.length][O2.length];
-
-        for(int i=0;i<O2.length;i++){
-            for(int j=0;j<O2.length;j++){
-                InitialO2Conc[i][j]=Math.abs(O2[i][j]);
-                //InitialO2Conc[i][j]=15*Math.pow(10,-9);
+                rowsList.add(row);  // Add the row to the list
             }
-
-
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-
-        // set oxygen levels in the grid
-        for(int i=0;i<Params.xDim;i++){
-            for(int j=0;j<Params.yDim;j++){
-
-                //pdegrid2d.Set(i,j,InitialO2Conc[i][j]); //In the even that location specific O2 concetration values are used
-                pdegrid2d.Set(i,j,Params.initial_oxygen_conc); //Constant initial concentrations at all locations
-            }
-
-        }
-
-        pdegrid2d.Update();
-
+        // Convert the list to a 2D array
+        vessels = rowsList.toArray(new int[rowsList.size()][]);
     }
+
 
     public int[] InitVessels() throws IOException {
         int[] vesselIndex  = new int[Params.nvessels]; // Contains corresponding  position indexes for vessel coordinates (x,y)
@@ -161,7 +155,7 @@ public class Resources {
         for(Cell c:onlatticeGrid){
             c.Consumption(timescalar);
         }
-        for (int i = 0; i < Params.nvessels; i++) {
+        for (int i = 0; i < vessels.length; i++) {
             pdegrid2d.Set(vessels[i][0], vessels[i][1],Params.vssl_bdary_value);
         }
         double[] deltas = pdegrid2d.GetDeltas();

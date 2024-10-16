@@ -13,6 +13,8 @@ public class Params {
      */
     OnLatticeGrid G;
 
+    String path2Vessels;
+
     //Resources resources=new Resources();
     final static String fileOut = "out/PopOut.csv";
     final static int BLACK= Util.RGB(0,0,0);
@@ -22,53 +24,6 @@ public class Params {
     final static int YELLOW= Util.RGB(1,1,0);
     final static int CYAN= Util.RGB(0,1,1);
 
-
-
-
-
-    static int nvessels; //number of blood vessels
-    static int[][] bloodVessels;
-
-
-
-
-    int[][] karyoLocationMatrix;
-    //holds user input data (n by 24) comprising cell location with associated karyotype
-
-
-
-    public Params(String filepath){
-
-    }
-    public Params(){
-
-    }
-
-    //Load parameters
-    public void parameter(String path2Parameters) {
-        File parameters = new File(OnLatticeGrid.mainDir.concat(path2Parameters));
-        FileReader file;
-
-        {
-            try {
-                file = new FileReader(OnLatticeGrid.mainDir.concat(path2Parameters));
-                BufferedReader bf = new BufferedReader(file);
-                String st = bf.readLine();
-                int sum = 0;
-                while ((st = bf.readLine()) != null) {
-                    StringTokenizer stn = new StringTokenizer(st);
-                    String rn = stn.nextToken();
-                    String name = stn.nextToken();
-                    int phy = Integer.parseInt(stn.nextToken());
-                    System.out.println("Parameter " + rn);
-                }
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
     int InitialPopulationType; //Selects the type of initialization, either seed from real data 0, or randomly seed diploi cells
     //Grid Parameters
@@ -88,10 +43,10 @@ public class Params {
     static double divisionRate_R = 0.057;
     static double movementRate_S = 0;
     /**  Uncomment the following to set sensitive-resistant cell specific rates
-    static double movementRate_R = 0;
-    static double deathRate_S =0.0027; // Natural death rate of sensitive cells in d^-1. Mean life span of a cell will be 1/k
-    static double deathRate_R = 0.0027;// Natural death rate of resistant cells in d^-1.
-    */
+     static double movementRate_R = 0;
+     static double deathRate_S =0.0027; // Natural death rate of sensitive cells in d^-1. Mean life span of a cell will be 1/k
+     static double deathRate_R = 0.0027;// Natural death rate of resistant cells in d^-1.
+     */
     static double drugKillProportion = 0;//0.75; // Drug induced death rate in d^-1.
     static double misRateWeight; //Weight for computing missegregation rate of cells
     static double natural_mis_seg_rate;
@@ -107,17 +62,6 @@ public class Params {
 
     static int runGUI = 1;
 
-    double[][] GrowthDeathRates;
-
-    {
-        try {
-            GrowthDeathRates = readRates();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
 
 
     //Oxygen Diffusion parameters
@@ -126,7 +70,7 @@ public class Params {
 
     //Following array for running replicates
     //    static int[] flow_levels={3250, 3000,2750,2500,2250,2000,1750,1500,1250,1000,750,500,250};
-   //    static int[] initial_levels={100,80,50,20,10,0};
+    //    static int[] initial_levels={100,80,50,20,10,0};
     static int[] oxygenAtVessels={4000};
     static int[] InitialSizes={20000,10000,5000};
     static double[] consumptionrates={100.0,30.0,20.0, 15.0, 10.0, 5.0,1.0};
@@ -158,10 +102,6 @@ public class Params {
     static double consumption_MM_constant; //Consumption Michaelis Menten constant
     static double growth_michaelis_menten_constant;
     static double death_michaelis_menten_constant;
-    int tumor;
-
-
-
 
     //Data writing
     static boolean writeO2Data=false; //write oxygen concentration data per grid cell and total concentration in the tissue at specified  time points
@@ -172,10 +112,63 @@ public class Params {
     int Radius=3;
     static int Spot=200;  // in the case of multiple spots, Selects a file associated with a certain random set of spots
 
-   // static double non_dim_diff_rate=(Resource_diff_rate*0.1)/Math.pow(spaceStep,2); //Calculating the nondimensionalized diffusion coefficient
 
 
-    //Analysis book
+
+    static int nvessels; //number of blood vessels
+    static int[][] bloodVessels;
+
+
+
+
+    int[][] karyoLocationMatrix;
+    //holds user input data (n by 24) comprising cell location with associated karyotype
+
+
+
+
+    public Params(){
+
+    }
+
+    //Load parameters
+    public void parameter(String path2Parameters) {
+        File parameters = new File(OnLatticeGrid.mainDir.concat(path2Parameters));
+        FileReader file;
+
+        {
+            try {
+                file = new FileReader(OnLatticeGrid.mainDir.concat(path2Parameters));
+                BufferedReader bf = new BufferedReader(file);
+                String st = bf.readLine();
+                int sum = 0;
+                while ((st = bf.readLine()) != null) {
+                    StringTokenizer stn = new StringTokenizer(st);
+                    String rn = stn.nextToken();
+                    String name = stn.nextToken();
+                    int phy = Integer.parseInt(stn.nextToken());
+                    System.out.println("Parameter " + rn);
+                }
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    double[][] GrowthDeathRates;
+
+    {
+        try {
+            GrowthDeathRates = readRates();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     int[][] centers;//  Centers of chosen spots for analysis after simulation
     {
         try {

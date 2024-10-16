@@ -366,19 +366,7 @@ public class helperMethods {
         return newArr;
     }
 
-    public boolean IsMember(int index, int x, int y){
-        OnLatticeGrid onLatticeGrid = new OnLatticeGrid(Params.xDim, Params.yDim);
-        helperMethods helper=new  helperMethods();
-        int[] arr=helper.Matrix2Vector(Resources.vessels); //Load up vessel data
-        boolean test=false;
-        for (int element : arr) {
-            if (element == index) {
-                test = true;
-                break;
-            }
-        }
-     return test;
-    }
+
 
     public boolean IsMember(int index, int[] array){
         helperMethods helper=new  helperMethods();
