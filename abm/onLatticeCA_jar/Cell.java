@@ -129,7 +129,7 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
         int iDaughter = G.hood[d_opts];
 
         // abort if chosen daughter location overlaps with vessel
-        if(helper.IsMember(iDaughter,G.resources.vesselIndex())) return;
+        if(helper.IsMember(iDaughter,G.resources.vessel_indices)) return;
 
         Cell daughter = G.NewAgentSQ(iDaughter);
         // copy parent parameters to daughter

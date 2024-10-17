@@ -8,7 +8,7 @@ natural_death_rate 0.2
 dt 1.0
 diffusion_dt 0.01
 tEnd 100
-Resource_diff_rate 108000.
+Resource_diff_rate 157.25
 Resource_flux 1000.0
 initial_oxygen_conc 0.00
 diff_vis_scale 0.0001

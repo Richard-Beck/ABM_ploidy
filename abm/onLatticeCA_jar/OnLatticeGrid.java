@@ -136,14 +136,8 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     String imageOutDir = "C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy"; // Directory which to save images to
 
-    // Output - Model file
-    Boolean saveModelState = false;
-    Boolean fromScratch = false;
-    String savedModelFileName = null; // Name of model file to load when continuing a previous run
     int[] diploid_karyotype = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
-    int[][] inputKaryotype = Params.inputKaryotype;
 
-    ExportData Export = new ExportData();
     ExportData exporter;
     public ArrayList<Double> CellRnNumbers = new ArrayList<>();
     public ArrayList<Double> mainRnNumbers = new ArrayList<>();
@@ -169,6 +163,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         myModel.exporter = new ExportData(outputPath,path2Params);
         myModel.resources = new Resources(myModel, myModel.xDim, myModel.yDim);;
         myModel.resources.initialize_vessels(Params.path2Vessels);
+        myModel.resources.vessels2Indices();
 
         myModel.Run();
         myModel.Close();
