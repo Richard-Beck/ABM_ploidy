@@ -107,45 +107,29 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     Rand rn; // Random number generator
     Rand rn_ICs; // Random number generator for initial conditions
-    Random random = new Random();
     int seed = 42;//Math.abs(random.nextInt());
 
     int verboseLevel = 1;
     double printFrequency = 3; // Frequency at which output is printed to the screen
-    double writeFrequency = 5;//Params.tEnd; //Frequency at which output is written to csv file
-    String cellCountLogFileName;
+
     FileIO cellCountLogFile = null;
-    double[][] outputArr; // Array to hold the simulation results if they're not directly logged to file
     double logCellCountFrequency = -1; // Frequency (in time units) at which the cell counts are written to file. <0 indicates no logging
     double[] extraSimulationInfo;
     String[] extraSimulationInfoNames;
 
     // Output - Visualisation
     UIGrid vis;
-    UIGrid vis2;
-
 
     Boolean visualiseB = true; // Whether or not to show visualization
     Boolean visualiseA = true;
     int scaleFactor = 2; // Scale factor used to display grid
-    int pause = 2; // 50  Pause between time steps to smoothen simulation
     final static int BLACK = Util.RGB(0, 0, 0);
-    final static int RED = Util.RGB(1, 0, 0);
-    final static int WHITE = Util.RGB(1, 1, 1);
     int imageFrequency = 1; // Frequency at which an image of the tumour is saved. Negative number turns it off
-
-    String imageOutDir = "C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy"; // Directory which to save images to
 
     int[] diploid_karyotype = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
     ExportData exporter;
-    public ArrayList<Double> CellRnNumbers = new ArrayList<>();
     public ArrayList<Double> mainRnNumbers = new ArrayList<>();
-
-
-    // ------------------------------------------------------------------------------------------------------------
-
-
 
     public static void main(String[] args) throws IOException {
         if(args.length<2){
@@ -184,32 +168,12 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         _PassAgentConstructor(Cell.class);
     }
 
-    public void SetInitialState(int[] initialStateArr) {
-        this.initPopSizeArr = initialStateArr;
-    }
 
-
-    public void SetTreatmentSchedule(double[][] treatmentScheduleList) {
-        this.treatmentScheduleList = treatmentScheduleList;
-    }
 
     public void SetSeed(int seed) {
         this.rn = new Rand(seed);
         this.rn_ICs = new Rand(seed);
 
-    }
-
-    public void SetSeed(int seed_Simulation, int seed_ICs) {
-        this.rn = new Rand(seed_Simulation);
-        this.rn_ICs = new Rand(seed_ICs);
-    }
-
-    public void ConfigureImaging(String imageOutDir, int imageFrequency) {
-        /*
-         * Configure location of and frequency at which tumour is imaged.
-         */
-        this.imageOutDir = imageOutDir;
-        this.imageFrequency = imageFrequency;
     }
 
 
@@ -318,39 +282,6 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
     }
 
 
-    public void InitialiseCellLog(String cellCountLogFileName, double frequency) {
-        InitialiseCellLog(cellCountLogFileName,frequency,false);
-    }
-
-    public void InitialiseCellLog(String cellCountLogFileName, double frequency, Boolean profilingMode) {
-        cellCountLogFile = new FileIO(cellCountLogFileName, "w");
-        WriteLogFileHeader();
-        this.cellCountLogFileName = cellCountLogFileName;
-        this.logCellCountFrequency = frequency;
-        if (profilingMode) {
-            double[] tmpArr = GetModelState();
-            int extraFields = extraSimulationInfoNames==null? 0: extraSimulationInfoNames.length;
-            this.outputArr = new double[5][tmpArr.length+extraFields];
-            // Initialise the logging array
-            for (int i=0; i<outputArr.length; i++) {for (int j=0; j<outputArr[0].length; j++) {outputArr[i][j] = 0;}}
-        }
-    }
-
-    private void WriteLogFileHeader() {
-        cellCountLogFile.Write("TIdx,Time,NCells_S,NCells_R,NCells,DrugConcentration,rS,rR,mS,mR,dS,dR,dD,dt");
-        if (extraSimulationInfoNames!=null) {
-            cellCountLogFile.Write(",");
-            cellCountLogFile.WriteDelimit(extraSimulationInfoNames, ",");
-        }
-        cellCountLogFile.Write("\n");
-
-    }
-
-    public void SetExtraSimulationInfo(String[] extraInfoNamesArr, double[] extraInfoArr) {
-        this.extraSimulationInfoNames = extraInfoNamesArr;
-        this.extraSimulationInfo = extraInfoArr;
-    }
-
     public Boolean SaveCurrentCellCount(int currTimeIdx) {
         Boolean successfulLog = false;
             if ( logCellCountFrequency > 0 &&(currTimeIdx % (int) (logCellCountFrequency / dt)) == 0) {
@@ -375,16 +306,6 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
 
         }
-    }
-
-    public void SaveModelState(String stateFileName) {
-        // Can't have active pointers when saving the model. So, close everything here.
-        if (cellCountLogFile!=null) {
-            cellCountLogFile.Close();
-            cellCountLogFile = null;
-        }
-        if (vis!=null) {vis = null;}
-        SaveState(this,stateFileName);
     }
 
     // ----------------------------------------------------------------------------------------------------------
