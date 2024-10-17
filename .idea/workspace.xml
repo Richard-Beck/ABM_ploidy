@@ -11,11 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="48bbfe7e-b593-42e2-9dbe-be4e368f3fd4" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Initialization.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/parameters.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/parameters.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/test_diffusion/base_parameters.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples/test_diffusion/base_parameters.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/test_diffusion/config.txt" beforeDir="false" afterPath="$PROJECT_DIR$/examples/test_diffusion/config.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input/seed.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/seed.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

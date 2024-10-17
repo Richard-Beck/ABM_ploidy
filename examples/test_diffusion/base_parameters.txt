@@ -8,7 +8,7 @@ natural_death_rate 0.0
 dt 1.0
 diffusion_dt 0.01
 tEnd 2
-Resource_diff_rate 108000.
+Resource_diff_rate 160.
 Resource_flux 1000.0
 initial_oxygen_conc 0.00
 diff_vis_scale 0.0001
@@ -24,7 +24,8 @@ cancer_oxygen_consumption_rate 5000.
 growth_michaelis_menten_constant 0.002
 consumption_MM_constant 0.005
 death_michaelis_menten_constant 0.002
-imageFrequency 20
-writeFrequency 20
+imageFrequency 1
+writeFrequency 1
 diffusion_tol 0.0000001
 runGUI 0
+path2Vessels C:\Users\4473331\Documents\projects\008_birthrateLandscape\ABM_ploidy\input\vessels.txt

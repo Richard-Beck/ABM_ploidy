@@ -56,7 +56,7 @@ df <- do.call(rbind,lapply(runs,function(r){
   o2[!is.na(o2$O2),]
 }))
 
-df <- df[df$time<2,]
+df <- df[df$time<1,]
 summary(df)
 ```
 
@@ -66,7 +66,7 @@ Plot the maximum delta in the oxygen field for each value of the swept parameter
 library(ggplot2)
 
 sps <- 1/(diff(df$time[1:2])*(24*60^2)) ## seconds per timestep
-p <- ggplot(df,aes(x=(time-1)*(24*60^2),y=maxDelta))+
+p <- ggplot(df,aes(x=time*(24*60^2),y=maxDelta))+
   geom_line(aes(color=normal_oxygen_consumption_rate,
                 group=normal_oxygen_consumption_rate))+
  
@@ -94,7 +94,7 @@ x <- rbind(get_dtol_pts(df,0.0001),
 
 sps <- 1/(diff(df$time[1:2])*(24*60^2))
 
-p <- ggplot(df,aes(x=(time-1)*(24*60^2),y=O2))+
+p <- ggplot(df,aes(x=time*(24*60^2),y=O2))+
   geom_line(aes(color=normal_oxygen_consumption_rate,
                 group=normal_oxygen_consumption_rate))+
   geom_line(data=x,aes(linetype =as.character(tol)))+

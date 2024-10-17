@@ -1,7 +1,7 @@
 test_diffusion
 ================
 Richard J Beck
-2024-10-15
+2024-10-17
 
 This example demonstrates setup and run for a sweep where
 normal_oxygen_consumption_rate is varied and we examine how many
@@ -57,25 +57,25 @@ df <- do.call(rbind,lapply(runs,function(r){
   o2[!is.na(o2$O2),]
 }))
 
-df <- df[df$time<2,]
+df <- df[df$time<1,]
 summary(df)
 ```
 
-    ##       time         O2               maxDelta      
-    ##  Min.   :1   Min.   :0.0000714   Min.   :0.0e+00  
-    ##  1st Qu.:1   1st Qu.:0.0209348   1st Qu.:1.0e-06  
-    ##  Median :1   Median :0.0281249   Median :8.0e-06  
-    ##  Mean   :1   Mean   :0.0289617   Mean   :    Inf  
-    ##  3rd Qu.:1   3rd Qu.:0.0365799   3rd Qu.:7.1e-05  
-    ##  Max.   :1   Max.   :0.0460146   Max.   :    Inf  
-    ##                                  NA's   :5        
+    ##       time                 O2               maxDelta       
+    ##  Min.   :0.0000005   Min.   :0.0000714   Min.   :0.000000  
+    ##  1st Qu.:0.0004660   1st Qu.:0.0032072   1st Qu.:0.000002  
+    ##  Median :0.0010160   Median :0.0047713   Median :0.000023  
+    ##  Mean   :0.0014994   Mean   :0.0064349   Mean   :     Inf  
+    ##  3rd Qu.:0.0023331   3rd Qu.:0.0102185   3rd Qu.:0.000413  
+    ##  Max.   :0.0046620   Max.   :0.0102510   Max.   :     Inf  
+    ##                                          NA's   :5         
     ##  normal_oxygen_consumption_rate
-    ##  Min.   :1000                  
-    ##  1st Qu.:2000                  
-    ##  Median :3000                  
-    ##  Mean   :2696                  
-    ##  3rd Qu.:4000                  
-    ##  Max.   :5000                  
+    ##  Min.   :100.0                 
+    ##  1st Qu.:100.0                 
+    ##  Median :100.0                 
+    ##  Mean   :204.8                 
+    ##  3rd Qu.:300.0                 
+    ##  Max.   :500.0                 
     ## 
 
 Plot the maximum delta in the oxygen field for each value of the swept
@@ -85,7 +85,7 @@ parameter:
 library(ggplot2)
 
 sps <- 1/(diff(df$time[1:2])*(24*60^2)) ## seconds per timestep
-p <- ggplot(df,aes(x=(time-1)*(24*60^2),y=maxDelta))+
+p <- ggplot(df,aes(x=time*(24*60^2),y=maxDelta))+
   geom_line(aes(color=normal_oxygen_consumption_rate,
                 group=normal_oxygen_consumption_rate))+
  
@@ -118,7 +118,7 @@ x <- rbind(get_dtol_pts(df,0.0001),
 
 sps <- 1/(diff(df$time[1:2])*(24*60^2))
 
-p <- ggplot(df,aes(x=(time-1)*(24*60^2),y=O2))+
+p <- ggplot(df,aes(x=time*(24*60^2),y=O2))+
   geom_line(aes(color=normal_oxygen_consumption_rate,
                 group=normal_oxygen_consumption_rate))+
   geom_line(data=x,aes(linetype =as.character(tol)))+
