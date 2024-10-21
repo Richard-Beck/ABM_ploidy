@@ -52,7 +52,20 @@ pars2Sweep <- lapply(pars2Sweep, unpack_parvals)
 parPaths <- NULL
 if(sweepMode=="x") {
   pars2Sweep <- expand.grid(pars2Sweep)
-  stop("sweep mode x is not yet implemented.")  
+  parPaths <- sapply(1:nrow(pars2Sweep),function(i){
+    tmp <- basePars
+    for(j in colnames(pars2Sweep)){
+      k <- which(tmp[,"parName"]==j)
+      tmp[k,"parVal"] <- pars2Sweep[i,j]
+    }
+    tmp <- paste(tmp[,1],tmp[,2])
+    saveName <- paste(colnames(pars2Sweep),pars2Sweep[i,],sep="_",collapse="_")
+    saveName <- gsub("[.]","p",saveName)
+    savePath <- paste0(path2Pars,saveName,".txt")
+    writeLines(tmp,savePath)
+    return(savePath)
+  })
+  
 }
 if(sweepMode=="."){
   if(sum(basePars[,"parName"]%in%names(pars2Sweep))<length(pars2Sweep)){
