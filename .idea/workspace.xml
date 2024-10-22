@@ -5,29 +5,45 @@
       <artifact name="ABM_ploidy:jar" />
     </artifacts-to-build>
   </component>
-  <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
-  </component>
   <component name="ChangeListManager">
-    <list default="true" id="48bbfe7e-b593-42e2-9dbe-be4e368f3fd4" name="Changes" comment="">
+    <list default="true" id="a0cf1c97-2d1d-45ec-b307-21631e2cec98" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/ABM_ploidy.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/ejml_v0_42_libs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ABM_ploidy_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/ABM_ploidy_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/code.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/ejml_v0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ABM_ploidy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ABM_ploidy.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R/check_deltas.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/check_deltas.R" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R/runSweep.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/runSweep.R" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R/unit_tests.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/R/unit_tests.Rmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/R/viz_output.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/viz_output.R" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abm/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/abm/META-INF/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Initialization.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/ExportData.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/ExportData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Params.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Params.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/homeostasisTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/homeostasisTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input/parameters.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/parameters.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/input/seed.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/seed.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -35,34 +51,29 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2nA5ktoedno2uEKlNpq9GsyjbaZ" />
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="2na3xdaoqzByq4bxgEfPwYcHmNq" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy/lib/ejml-v0.42-libs&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
 }</component>
   <component name="RunManager">
-    <configuration name="ABM" type="Application" factoryName="Application">
+    <configuration name="ABM_ploidy" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="onLatticeCA_jar.OnLatticeGrid" />
       <module name="ABM_ploidy" />
-      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/input/parameters.txt output" />
-      <shortenClasspath name="ARGS_FILE" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Application" factoryName="Application">
-      <shortenClasspath name="ARGS_FILE" />
+      <option name="PROGRAM_PARAMETERS" value="$PROJECT_DIR$/input/parameters.txt $PROJECT_DIR$/output" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -71,38 +82,23 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="48bbfe7e-b593-42e2-9dbe-be4e368f3fd4" name="Changes" comment="" />
-      <created>1728403188297</created>
+      <changelist id="a0cf1c97-2d1d-45ec-b307-21631e2cec98" name="Changes" comment="" />
+      <created>1729197607836</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1728403188297</updated>
+      <updated>1729197607836</updated>
     </task>
     <servers />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/abm/HAL/Tools/Internal/ADIequations.java</url>
-          <line>60</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/abm/onLatticeCA_jar/ExportData.java</url>
-          <line>93</line>
-          <option name="timeStamp" value="47" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/abm/onLatticeCA_jar/homeostasisTests.java</url>
-          <line>21</line>
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-    <watches-manager>
-      <configuration name="Application">
-        <watch expression="myModel.resources" />
-      </configuration>
-    </watches-manager>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

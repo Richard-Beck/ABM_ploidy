@@ -1,4 +1,4 @@
-setwd("~/projects/008_birthrateLandscape/ABM_ploidy/output/deltas/")
+setwd("/Users/4477116/Documents/projects/ABM_ploidy/output/run_0/")
 
 ff <- list.files()
 

@@ -90,6 +90,7 @@ public class Params {
     static double diffusion_dt;
 
     static double diffusion_tol;
+    static double Courant_number;
 
     static int writeFrequency;
     static int imageFrequency;

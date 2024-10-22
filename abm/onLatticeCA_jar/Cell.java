@@ -87,6 +87,7 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
         cancerous = parent.cancerous; Vo=parent.Vo; ko=parent.ko;
         movementRate = parent.movementRate; resistance = parent.resistance;
         missegregationRate = parent.missegregationRate;
+
         //copy karyotype from parent
         for(int i = 0; i<karyotype.length; i++){
             karyotype[i] = parent.karyotype[i];
@@ -205,7 +206,9 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
 
     public void setDeathRate(){ //concentration dependent death rate
         double O2concentration=G.resources.pdegrid2d.Get(Isq());
-        double death=(Params.natural_death_rate)*(1-O2concentration/ ( O2concentration + Params.death_michaelis_menten_constant));
+        double death=(Params.natural_death_rate)*(1-O2concentration/(O2concentration + Params.death_michaelis_menten_constant));
+        //Params.natural_death_rate+(0.5-Params.natural_death_rate)/(1+O2concentration/Params.death_michaelis_menten_constant);
+
         if(cancerous) {
             deathRate = death/20;
         }else{
@@ -218,6 +221,8 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
         double O= G.resources.pdegrid2d.Get(Isq());
         // oxygen consumption follows Michaelis Menten kinetics:
         double consumption= -Vo*O/(O+ko);
+
+
         G.resources.pdegrid2d.Add(Isq(), consumption*timescalar);
     }
 

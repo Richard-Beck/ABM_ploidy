@@ -33,6 +33,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     boolean homeostasisReached = false;
 
+
     /* ========================================================================
      * --- Parameters ----
      * ======================================================================== */
@@ -68,7 +69,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     //double[]  consumption=new double[3];
 
-    static String mainDir = "C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy"; //Main project directory
+    static String mainDir = "/Users/4477116/Documents/projects/ABM_ploidy"; //Main project directory
     ArrayList<String> randomNumbers = new ArrayList<String>();
 
 
@@ -237,17 +238,18 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
             double diffusionTime = (double) tIdx;
             int cxx = 0;
             double AvgO2 = 0.;
+
             while (Params.diffusion_tol < resources.maximum_delta | cxx <10 | !Double.isFinite(resources.maximum_delta)) {
                 cxx++;
                 diffusionTime+=resources.setDirechletCond();
-                AvgO2=helper.getTotalO2ConcInTheGrid(resources.pdegrid2d)/(xDim*yDim);
+                AvgO2=  resources.pdegrid2d.GetAvg();
                 exporter.writeOxygenSummary(diffusionTime,AvgO2,resources.maximum_delta);
-              //  System.out.println(resources.maximum_delta);
+
             }
             resources.Drawvessels();
 
-
             if(tIdx == 1){
+
                 exporter.saveImage(vis,resources.currV,tIdx);
             } else if (Params.imageFrequency > 0 && (tIdx % (int) (Params.imageFrequency/dt)) == 0){
                 exporter.saveImage(vis,resources.currV,tIdx);
@@ -264,9 +266,16 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
                     exporter.saveOxygenField(tIdx,resources.pdegrid2d);
                 }
             }
+            if(tIdx%5 == 0&tIdx>1) {
+                exporter.createGifFiles(vis,resources.currV);
+            }
 
 
-            homeostasisReached = h.test(AvgO2,normalCellCounter);
+            if(!homeostasisReached){
+                homeostasisReached = h.test(AvgO2, normalCellCounter);
+                if(homeostasisReached){ System.out.println("Homeostasis reached");
+                }
+            }
 
             tIdx++;
             // Check if the stopping condition is met

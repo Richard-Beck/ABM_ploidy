@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="code">
+  <library name="ABM_ploidy">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/code.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/ABM_ploidy_jar/ABM_ploidy.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

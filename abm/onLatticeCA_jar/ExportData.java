@@ -27,8 +27,9 @@ public class ExportData{
     /**
      * For exporting ABM data for further analysis
      */
-    File outputFolder,imageFolder,karyotypeFolder,oxygenFolder;
+    File outputFolder,imageFolder,karyotypeFolder,oxygenFolder,gifFolder;
     FileIO oxygenSummary,summary;
+    GifMaker cells_O2;
     public int karyotypeDrawValue;
     public String karyotypeWriteValue;
     public OnLatticeGrid G;
@@ -55,6 +56,8 @@ public class ExportData{
         // create subfolders to store any images.
         imageFolder = new File(outputPath+"/images");
         imageFolder.mkdirs();
+        gifFolder =new File(outputPath+"/gifs");
+        gifFolder.mkdirs();
 
         karyotypeFolder = new File(outputPath+"/karyotypes");
         karyotypeFolder.mkdirs();
@@ -65,8 +68,11 @@ public class ExportData{
         oxygenSummary = new FileIO(outputPath + "/oxygen.csv", "w");
         oxygenSummary.Write("time, O2, maxDelta \n");
 
+        cells_O2=new GifMaker(outputPath +"/gifs/cell_oxygen.gif",1,true);
+
+
         summary = new FileIO(outputPath + "/summary.csv", "w");
-        summary.Write("time,nNormal,Ncancer \n");
+        summary.Write("time,nNormal,nCancer \n");
     }
     public ExportData(){}
 
@@ -93,6 +99,7 @@ public class ExportData{
 
         summary.Close();
         oxygenSummary.Close();
+        cells_O2.Close();
     }
     public void saveKaryotypeLocationData(int currentTime,OnLatticeGrid G){
         FileIO karyotype_Location = new FileIO(karyotypeFolder+"/"+currentTime +".csv","w");
@@ -115,6 +122,21 @@ public class ExportData{
         }
         oxygen_Location.Close();
     }
+    public void createGifFiles(UIGrid cells, UIGrid vessels){
+        UIGrid vis = new UIGrid(cells.xDim+vessels.xDim, cells.yDim, 2);
+        for(int y=0; y<cells.yDim; y++){
+            for(int x=0; x<cells.xDim; x++){
+                vis.SetPix(x,y,cells.GetPix(x,y));
+                vis.SetPix(x+cells.xDim,y,vessels.GetPix(x,y));
+            }
+        }
+        cells_O2.AddFrame(vis);
+    }
+
+    public void saveGif(UIGrid frame){
+
+    }
+
     public void saveData(int currentTime,OnLatticeGrid G){
 
 
@@ -217,13 +239,8 @@ public class ExportData{
 
 
 
-    public void createGifFiles(){
-        GifMaker myGif1=new GifMaker( G.mainDir.concat("/output/Gif/Cells.gif"),1,true);
-        GifMaker myGif2=new GifMaker( G.mainDir.concat("/output/Gif/Vessels.gif"),1,true);
-    }
-    public void saveGif(UIGrid frame){
 
-    }
+
 
 
     public void saveMax_deltas(ArrayList<Double[]> max_deltas){

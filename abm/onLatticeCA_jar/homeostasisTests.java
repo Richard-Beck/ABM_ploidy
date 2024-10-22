@@ -7,6 +7,7 @@ public class homeostasisTests {
     double criticalValue = 1.;
 
     boolean homeostasisReached = false;
+    boolean homeostasisAchieved=false;
     List<Double> o2List;
     List<Double> nCellsList;
 
@@ -21,9 +22,12 @@ public class homeostasisTests {
         if(o2List.size()<2*winsize) return false;
         if(o2List.size()>2*winsize) o2List.remove(o2List.size()-1);
         if(nCellsList.size()>2*winsize) nCellsList.remove(nCellsList.size()-1);
-        homeostasisReached = ks_test(o2List)&ks_test(nCellsList);
+         //homeostasisReached = ks_test(o2List)&ks_test(nCellsList);
+         homeostasisReached=checkHomeostasis(o2List,winsize,1e-4)&checkHomeostasis(nCellsList,winsize,100);
+
+
         if(homeostasisReached){
-            System.out.println("homeostasis has been reached!");
+          //  System.out.println("homeostasis has been reached!");
         }
         return homeostasisReached;
     }
@@ -58,4 +62,48 @@ public class homeostasisTests {
         }
         return sum/data.length;
     }
+
+/** Sliding window test, check the overall difference between the average of two consecutive windows in O2 values and compares
+ * it to a set tolerance  */
+
+
+    public static boolean checkHomeostasis(List<Double> o_data, int windowSize, double tolerance) {
+        // Convert List to an array for easier access
+        double[] data = new double[o_data.size()];
+        for (int i = 0; i < o_data.size(); i++) {
+            data[i] = o_data.get(i);
+        }
+
+        // Make sure the data length is at least 2 times the window size
+        if (data.length < windowSize * 2) {
+            throw new IllegalArgumentException("Data array is too small for the given window size.");
+        }
+
+        // Get the last two windows
+        int secondWindowStart = data.length - windowSize; // Start of the second window
+        int firstWindowStart = secondWindowStart - windowSize; // Start of the first window
+
+        // Calculate the average value in the first window [firstWindowStart, secondWindowStart)
+        double avgWindow1 = calculateAverage(data, firstWindowStart, secondWindowStart);
+
+        // Calculate the average value in the second window [secondWindowStart, data.length)
+        double avgWindow2 = calculateAverage(data, secondWindowStart, data.length);
+
+        // Compute the absolute change between the two consecutive windows
+        double avgChange = Math.abs(avgWindow2 - avgWindow1);
+
+        // If the change is greater than the tolerance, homeostasis has not been reached
+        return avgChange <= tolerance;
+    }
+
+
+
+    private static double calculateAverage(double[] data, int start, int end) {
+        double sum = 0;
+        for (int i = start; i < end; i++) {
+            sum += data[i];
+        }
+        return sum / (end - start);
+    }
+
 }

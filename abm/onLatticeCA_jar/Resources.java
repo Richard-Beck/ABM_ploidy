@@ -77,7 +77,7 @@ public class Resources {
 
     public double setDirechletCond() {
         // advisable to limit Courant number to 0.2/
-        double timescalar = 0.2/non_dim_diff_rate;
+        double timescalar = Params.Courant_number/non_dim_diff_rate;
         pdegrid2d.DiffusionADI(non_dim_diff_rate*timescalar);
         for(Cell c:onlatticeGrid){
             c.Consumption(timescalar);

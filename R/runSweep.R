@@ -1,4 +1,4 @@
-path2config <- "~/projects/008_birthrateLandscape/ABM_ploidy/output/diffusion_tests/test_homeostasis/config.txt"
+path2config <- "/Users/4477116/Documents/projects/ABM_ploidy/output/test_diffusion/test_homeostasis/config.txt"
 config <- readLines(path2config)
 
 config <- do.call(rbind,lapply(config,function(ci) unlist(strsplit(ci,split="="))))
@@ -70,4 +70,5 @@ if(sweepMode=="."){
 
 cmds <- paste(javaCMD, parPaths, path2Sims)
 for(cmd in cmds) system(cmd)
+
 
