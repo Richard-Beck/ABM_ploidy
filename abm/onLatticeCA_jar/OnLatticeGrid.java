@@ -239,7 +239,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
             int cxx = 0;
             double AvgO2 = 0.;
 
-            while (Params.diffusion_tol < resources.maximum_delta | cxx <10 | !Double.isFinite(resources.maximum_delta)) {
+            while (Params.diffusion_tol < resources.maximum_delta | cxx <10) {
                 cxx++;
                 diffusionTime+=resources.setDirechletCond();
                 AvgO2=  resources.pdegrid2d.GetAvg();

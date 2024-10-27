@@ -7,35 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a0cf1c97-2d1d-45ec-b307-21631e2cec98" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/ABM_ploidy.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/ejml_v0_42_libs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ABM_ploidy_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/ABM_ploidy_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/code.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/ejml_v0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ABM_ploidy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/ABM_ploidy.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R/check_deltas.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/check_deltas.R" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R/runSweep.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/runSweep.R" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R/unit_tests.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/R/unit_tests.Rmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R/viz_output.R" beforeDir="false" afterPath="$PROJECT_DIR$/R/viz_output.R" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/abm/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Cell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/ExportData.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/ExportData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/OnLatticeGrid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Params.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Params.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/Resources.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/abm/onLatticeCA_jar/homeostasisTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/abm/onLatticeCA_jar/homeostasisTests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/input/parameters.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/parameters.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/input/seed.txt" beforeDir="false" afterPath="$PROJECT_DIR$/input/seed.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

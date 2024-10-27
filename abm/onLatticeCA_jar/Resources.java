@@ -85,7 +85,7 @@ public class Resources {
         for (int[] vessel : vessels) {
             pdegrid2d.Set(vessel[0], vessel[1], Params.vssl_bdary_value);
         }
-         maximum_delta = pdegrid2d.MaxDeltaScaled(0.);
+         maximum_delta = pdegrid2d.MaxDeltaScaled(0.0000001);
         pdegrid2d.Update();
         return timescalar;
     }
