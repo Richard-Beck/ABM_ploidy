@@ -1,5 +1,0 @@
-path2BaseParFile=C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy/examples/test_diffusion/base_parameters.txt
-path2Output=C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy/output/test_diffusion/
-javaCMD=C:/Users/4473331/.jdks/openjdk-20.0.1/bin/java.exe -jar C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy/out/artifacts/ABM_ploidy_jar/ABM_ploidy.jar
-sweeptype=.
-normal_oxygen_consumption_rate=1000:5000:1000
