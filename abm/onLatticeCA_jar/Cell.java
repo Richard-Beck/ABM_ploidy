@@ -56,7 +56,7 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
         for(int i = 0; i<karyotype.length; i++){
             karyotype[i] = kary[i];
         }
-        ko = Params.consumption_MM_constant;
+        ko = Params.consumption_michaelis_menten_constant;
         hash = Arrays.hashCode(karyotype);   // unique identity generated for each cell based on karyotype
         deathRate = Params.natural_death_rate;
         if (Util.ArrayMean(karyotype) == 2) {

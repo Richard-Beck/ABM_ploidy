@@ -142,6 +142,12 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         Params Params = new Params();
         Params.load(path2Params);
 
+        System.out.println("initialTumorSize: "+ Params.allParams.get("initialTumorSize"));
+
+
+
+
+
 
         OnLatticeGrid myModel = new OnLatticeGrid(Params.xDim, Params.yDim);
         myModel.SetSeed(myModel.seed);

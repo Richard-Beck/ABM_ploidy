@@ -100,7 +100,7 @@ public class Params {
     //Other rates
     static double dt;// = 1; // Time step in d
     static int tEnd;// simulation end time
-    static double consumption_MM_constant; //Consumption Michaelis Menten constant
+    static double consumption_michaelis_menten_constant; //Consumption Michaelis Menten constant
     static double growth_michaelis_menten_constant;
     static double death_michaelis_menten_constant;
 
@@ -180,18 +180,25 @@ public class Params {
     }
 
 
-    //
+
+
+    public Map<String, Parameter> allParams = new HashMap<>();
 
     public void load(String filename) {
-        Map<String, String> params = new HashMap<>();
-
-        // Read the file line by line
+        // Read the CSV file line by line
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
+            reader.readLine(); // Skip the header row if there is one
+
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\\s+"); // Split by spaces or tabs
-                if (parts.length == 2) {
-                    params.put(parts[0], parts[1]);
+                String[] parts = line.split(","); // Split by comma for CSV format
+                if (parts.length >= 2) {
+                    String paramName = parts[0].trim();
+                    String paramValue = parts[1].trim();
+                    String paramUnit = (parts.length > 2) ? parts[2].trim() : ""; // Default to empty string if no unit
+
+                    // Store parameter name, value, and unit in the map
+                    allParams.put(paramName, new Parameter(paramValue, paramUnit));
                 }
             }
         } catch (IOException e) {
@@ -199,26 +206,95 @@ public class Params {
         }
 
         // Update the fields using reflection
-        for (Map.Entry<String, String> entry : params.entrySet()) {
+        for (Map.Entry<String, Parameter> entry : allParams.entrySet()) {
             try {
                 Field field = this.getClass().getDeclaredField(entry.getKey());
                 field.setAccessible(true);
 
-                // Check the field type and parse accordingly
+                // Parse the value based on the field type
+                String value = entry.getValue().value;
                 if (field.getType() == int.class) {
-                    field.setInt(this, Integer.parseInt(entry.getValue()));
+                    field.setInt(this, Integer.parseInt(value));
                 } else if (field.getType() == double.class) {
-                    field.setDouble(this, Double.parseDouble(entry.getValue()));
+                    field.setDouble(this, Double.parseDouble(value));
                 } else if (field.getType() == boolean.class) {
-                    field.setBoolean(this, Boolean.parseBoolean(entry.getValue()));
+                    field.setBoolean(this, Boolean.parseBoolean(value));
                 } else if (field.getType() == String.class) {
-                    field.set(this, entry.getValue());
+                    field.set(this, value);
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.out.println("Warning: No matching field found for parameter: " + entry.getKey());
             }
         }
     }
+
+    /**
+     * //For .txt files
+    public void load(String filename) {
+        // Read the file line by line
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split("\\s+"); // Split by spaces or tabs
+                if (parts.length >= 2) {
+                    String paramName = parts[0];
+                    String paramValue = parts[1];
+                    String paramUnit = (parts.length > 2) ? parts[2] : ""; // Default to empty string if no unit
+
+                    // Store parameter name, value, and unit in the map
+                    allParams.put(paramName, new Parameter(paramValue, paramUnit));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Update the fields using reflection
+        for (Map.Entry<String, Parameter> entry : allParams.entrySet()) {
+            try {
+                Field field = this.getClass().getDeclaredField(entry.getKey());
+                field.setAccessible(true);
+
+                // Parse the value based on the field type
+                String value = entry.getValue().value;
+                if (field.getType() == int.class) {
+                    field.setInt(this, Integer.parseInt(value));
+                } else if (field.getType() == double.class) {
+                    field.setDouble(this, Double.parseDouble(value));
+                } else if (field.getType() == boolean.class) {
+                    field.setBoolean(this, Boolean.parseBoolean(value));
+                } else if (field.getType() == String.class) {
+                    field.set(this, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                System.out.println("Warning: No matching field found for parameter: " + entry.getKey());
+            }
+        }
+    }
+    */
+    // Inner class to represent parameter with value and unit
+    private static class Parameter {
+        String value;
+        String unit;
+
+        Parameter(String value, String unit) {
+            this.value = value;
+            this.unit = unit;
+        }
+
+        @Override
+        public String toString() {
+            return "Value: " + value + ", Unit: " + unit;
+        }
+    }
+
+
+
+
+
+
+
+
 
 
   public int[][] readVessel() throws IOException {
