@@ -8,21 +8,34 @@ import HAL.Tools.FileIO;
 import HAL.Util;
 
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.util.Random;
-//import MelanomaModel.Pars;
-//import MelanomaModel.OnLatticeVis;
-
-import java.io.File;
-import java.util.Arrays;
-
 import java.io.*;
 
 import static HAL.Util.*;
 
+// color registry for karyotypes (hash -> color)
+import java.util.Map;
+import java.util.HashMap;
+
+
+
 public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableModel {
 
+    private static final int KARYO_PALETTE_SIZE = 20; // HAL's categorical palette size
+
+    public Map<Integer,Integer> karyoColor = new HashMap<>();
+    public int nextKaryoColorIdx = 0;
+
+    public int colorForKaryotypeHash(int h) {
+        Integer c = karyoColor.get(h);
+        if (c == null) {
+            int idx = nextKaryoColorIdx % KARYO_PALETTE_SIZE;
+            c = HAL.Util.CategorialColor(idx);
+            karyoColor.put(h, c);
+            nextKaryoColorIdx++;
+        }
+        return c;
+    }
 
     Params Params = new Params();
 
@@ -32,7 +45,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
 
     boolean homeostasisReached = false;
-
+    public boolean cancerExists = false;
     /* ========================================================================
      * --- Parameters ----
      * ======================================================================== */
@@ -68,7 +81,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     //double[]  consumption=new double[3];
 
-    static String mainDir = "C:/Users/4473331/Documents/projects/008_birthrateLandscape/ABM_ploidy"; //Main project directory
+    static String mainDir = "/home/richard/projects/ABM_ploidy"; //Main project directory
     ArrayList<String> randomNumbers = new ArrayList<String>();
 
 
@@ -127,6 +140,7 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
     int imageFrequency = 1; // Frequency at which an image of the tumour is saved. Negative number turns it off
 
     int[] diploid_karyotype = {2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+    
 
     ExportData exporter;
     public ArrayList<Double> mainRnNumbers = new ArrayList<>();
@@ -158,9 +172,6 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         super(xDim, yDim, Cell.class);
     }
 
-
-
-
     // Function used as part of SerializableModel to allow saving the model's state so that I can restart
     // the simulation exactly where I left off at the end of the last treatment interval.
     @Override
@@ -168,21 +179,11 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         _PassAgentConstructor(Cell.class);
     }
 
-
-
     public void SetSeed(int seed) {
         this.rn = new Rand(seed);
         this.rn_ICs = new Rand(seed);
 
     }
-
-
-    public double[] GetModelState() {
-        return new double[]{tIdx, tIdx * dt, cellCountsArr[0], cellCountsArr[1], Util.ArraySum(cellCountsArr),
-                currDrugConcentration, divisionRate_S, divisionRate_R, movementRate_S, movementRate_R, deathRate_S, deathRate_R, drugKillProportion, dt};
-
-    }
-
     // ------------------------------------------------------------------------------------------------------------
     // Seeding functions for the cells
     public void InitCells(int N){
@@ -208,7 +209,6 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
             if (helper.isAboveThreshold(5, c.karyotype)) { //if a copy number  is above 5, kill cell
                 vis.SetPix(c.Isq(), BLACK); // Death
                 c.Dispose();
-                System.out.println("cell is dead");
                 DeadCellCounter += 1;
 
             } else  c.DivideOrDie();
@@ -218,84 +218,39 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
 
     // ------------------------------------------------------------------------------------------------------------
     public void Run() {
+    // GUI setup
+    this.vis = new UIGrid(xDim, yDim, scaleFactor, visualiseB);
+    visualize visuals = (Params.runGUI == 1) ? new visualize(this, "visuals") : null;
 
-        // Initialise visualisation window
-        this.vis = new UIGrid(xDim, yDim, scaleFactor, visualiseB);
-        visualize visuals = null;
-        if(Params.runGUI ==1 ) visuals =new visualize(this,"visuals");
+    InitCells((int)Params.initialTumorSize);
+    homeostasisTests h = new homeostasisTests();
 
+    boolean done = false;
+    while (!done) {
+        PrintStatus(tIdx);
 
-        InitCells((int)Params.initialTumorSize);
-        homeostasisTests h = new homeostasisTests();
-        // Run the simulation
-        boolean completedSimulation = false;
-        while (!completedSimulation) {
-            PrintStatus(tIdx);
-            // NOTE:
-            //  resources.maximum_delta will be NaN if the O2 initial condition is 0.
-            //  This has the potential to cause problems /RJB
-            double diffusionTime = (double) tIdx;
-            int cxx = 0;
-            double AvgO2 = 0.;
-            while (Params.diffusion_tol < resources.maximum_delta | cxx <10 | !Double.isFinite(resources.maximum_delta)) {
-                cxx++;
-                diffusionTime+=resources.setDirechletCond();
-                AvgO2=helper.getTotalO2ConcInTheGrid(resources.pdegrid2d)/(xDim*yDim);
-                exporter.writeOxygenSummary(diffusionTime,AvgO2,resources.maximum_delta);
-              //  System.out.println(resources.maximum_delta);
-            }
-            resources.Drawvessels();
+        double simTimeAdded = resources.relaxUntil(Params.diffusion_tol, 1000);
+        resources.Drawvessels();
 
+        double meanO2 = helper.getTotalO2ConcInTheGrid(resources.pdegrid2d) / (xDim * yDim);
+        double maxDelta = resources.maximum_delta;
 
-            if(tIdx == 1){
-                exporter.saveImage(vis,resources.currV,tIdx);
-            } else if (Params.imageFrequency > 0 && (tIdx % (int) (Params.imageFrequency/dt)) == 0){
-                exporter.saveImage(vis,resources.currV,tIdx);
-            }
+        exporter.maybeSnapshot(tIdx, vis, resources, this, dt);
+        homeostasisReached = h.test(meanO2, normalCellCounter);
 
-            if (tIdx == 1) {
-                if (Params.writeKaryotypeData) {
-                    exporter.saveKaryotypeLocationData(tIdx, this);
-                    exporter.saveOxygenField(tIdx,resources.pdegrid2d);
-                }
-            } else if (verboseLevel > 0 && (tIdx % (int) (Params.writeFrequency / dt)) == 0) {
-                if (Params.writeKaryotypeData) {
-                    exporter.saveKaryotypeLocationData(tIdx, this);
-                    exporter.saveOxygenField(tIdx,resources.pdegrid2d);
-                }
-            }
+        tIdx++;
+        done = (tIdx > Params.tEnd);
 
+        StepCells();
+        exporter.writeTick(tIdx, normalCellCounter, cancerCellCounter, simTimeAdded, meanO2, maxDelta);
+    }
 
-            homeostasisReached = h.test(AvgO2,normalCellCounter);
-
-            tIdx++;
-            // Check if the stopping condition is met
-            completedSimulation = (tIdx > Params.tEnd);//?true:false;
-            StepCells();
-            exporter.writeSummary((double) tIdx, normalCellCounter, cancerCellCounter);
-        }
-
-
-        exporter.close();
-
-        if(visuals != null) visuals.close();
+    exporter.close();
+    if (visuals != null) visuals.close();
     }
 
 
-    public Boolean SaveCurrentCellCount(int currTimeIdx) {
-        Boolean successfulLog = false;
-            if ( logCellCountFrequency > 0 &&(currTimeIdx % (int) (logCellCountFrequency / dt)) == 0) {
-                cellCountLogFile.WriteDelimit(GetModelState(), ",");
-                if (extraSimulationInfoNames != null) {
-                    cellCountLogFile.Write(",");
-                    cellCountLogFile.WriteDelimit(extraSimulationInfo, ",");
-                }
-                cellCountLogFile.Write("\n");
-                successfulLog = true;
-            }
-        return successfulLog;
-    }
-
+    
     public void PrintStatus(int currTimeIdx) {
 
         if (verboseLevel > 0 && (currTimeIdx %  (int) (printFrequency/dt)) == 0) {
@@ -314,13 +269,4 @@ public class OnLatticeGrid extends AgentGrid2D<Cell> implements SerializableMode
         if (cellCountLogFile!=null) cellCountLogFile.Close();
 
     }
-
-    public void Close(Boolean logged) {
-        if (!logged) {
-            tIdx--;
-            SaveCurrentCellCount(0);}
-        if (cellCountLogFile!=null) {cellCountLogFile.Close();}
-    }
-
-
 }

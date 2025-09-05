@@ -99,68 +99,98 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
             return MapEmptyHood(G.hood) >1;
         }
     }
+    void missegregate(int N, int X, Cell daughter){
+        final int nChr = karyotype.length;
 
-    private void missegregate(Cell daughter){
+        // snapshot of parent's pre-division counts to define event probabilities
+        int[] base = java.util.Arrays.copyOf(karyotype, nChr);
 
-        cancerous = true;
-        daughter.cancerous=true;
+        // cumulative sums over base to map [0..N-1] -> chromosome index
+        int[] cum = new int[nChr + 1];
+        cum[0] = 0;
+        for (int j = 0; j < nChr; j++) cum[j + 1] = cum[j] + base[j];
 
-        ChromToChange = G.rn.Int(karyotype.length);
-        copyNumberChange =G.rn.Int(karyotype[ChromToChange]);
+        // X missegregation events
+        for (int e = 0; e < X; e++) {
+            int pick = G.rn.Int(N);            // 0..N-1
+            // map to chromosome j (small nChr => linear scan is fine)
+            int j = 0; while (pick >= cum[j + 1]) j++;
 
-        karyotype[ChromToChange] = 2 * karyotype[ChromToChange] - copyNumberChange;
-        daughter.karyotype[ChromToChange] = copyNumberChange;
+            // choose direction randomly (which daughter gains)
+            boolean daughterGains = G.rn.Bool();
 
-        daughter.setMissegregationRate(daughter.karyotype,daughter.cancerous);//
+            if (daughterGains) {
+                // parent -> daughter if parent has something to give
+                if (karyotype[j] > 0) {
+                    karyotype[j]      -= 1;
+                    daughter.karyotype[j] += 1;
+                } else if (daughter.karyotype[j] > 0) {
+                    // flip direction to avoid negative
+                    daughter.karyotype[j] -= 1;
+                    karyotype[j]      += 1;
+                }
+            } else {
+                // daughter -> parent if daughter has something to give
+                if (daughter.karyotype[j] > 0) {
+                    daughter.karyotype[j] -= 1;
+                    karyotype[j]      += 1;
+                } else if (karyotype[j] > 0) {
+                    // flip direction
+                    karyotype[j]      -= 1;
+                    daughter.karyotype[j] += 1;
+                }
+            }
+        }
+
+        daughter.setMissegregationRate(daughter.karyotype, daughter.cancerous);
         setMissegregationRate(karyotype, cancerous);
         G.missegregationCounter += 1;
-    }
+    }   
+
 
     void make_cancerous(){
         cancerous= true;
         Vo = Params.cancer_oxygen_consumption_rate;
         divisionRate = Params.cancer_cell_growth_rate;
     }
-    void Divide () {
-        // How does this code behave when the neighborhood is full?
-        // OR is it the case that we can never get here when the neighborhood is full...
-        int nOpts=MapEmptyHood(G.hood);
-        int d_opts= G.rn.Int(nOpts);
-        int iDaughter = G.hood[d_opts];
+    void Divide() {
+        int nOpts = MapEmptyHood(G.hood);
+        if (nOpts == 0) return;
 
-        // abort if chosen daughter location overlaps with vessel
-        if(helper.IsMember(iDaughter,G.resources.vessel_indices)) return;
+        int iDaughter = G.hood[G.rn.Int(nOpts)];
+        if (helper.IsMember(iDaughter, G.resources.vessel_indices)) return;
 
         Cell daughter = G.NewAgentSQ(iDaughter);
-        // copy parent parameters to daughter
         daughter.init(this);
-        if (G.rn.Double() < missegregationRate & G.homeostasisReached){
-            missegregate(daughter);
+
+        // seed exactly one cancer at/after homeostasis
+        if (G.homeostasisReached && !G.cancerExists) {
             make_cancerous();
-            daughter.make_cancerous();
+            G.cancerExists = true;
+        }
+        if (this.cancerous) daughter.make_cancerous();
 
-        } else G.RegularDivisionCounter += 1;
+        if (this.cancerous && G.cancerExists) {
+            // 1) sum copies
+            int N = 0; for (int v : karyotype) N += v;
+            if (N > 0) {
+                // 2) one binomial draw using RAND.java
+                int X = G.rn.Binomial(N, missegregationRate);
+                // 3) allocate X events among N copies
+                if (X > 0) missegregate(N, X, daughter);
+            }
+        } else {
+            G.RegularDivisionCounter += 1;
+        }
 
+        // refresh hashes 
         hash = Arrays.hashCode(karyotype);
         daughter.hash = Arrays.hashCode(daughter.karyotype);
 
-        //ISSUES:
-        // This 5 should not be hardcoded here. Better places include but are not limited
-        // to the parameter file, or as a static int at the top of a class definition.
-        // Isn't it possible the parent is also above the threshold? Why isn't that checked??
-        // Seems there is another check inside the stepcells function, which should catch the parent.
-        // Probably should delete the check below.
-        if (helper.isAboveThreshold(5, daughter.karyotype)) {
-            daughter.Dispose();
-            G.DeadCellCounter +=1;
-            // what does this do.
-            G.cellCountsArr[daughter.resistance] -= 1;
-        } else {
-            // seems a little odd to draw the daughter now.
-            daughter.Draw();
-        }
-
+        this.Draw();
+        daughter.Draw();
     }
+
     // -----------------------------------
     boolean Move(){
         boolean successfulMoveB = false;
@@ -184,7 +214,7 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
     public void setMissegregationRate(int [] karyotype, boolean type){
         //Use array sum to inform missegregation rate
         if(cancerous){
-            missegregationRate =(Util.ArraySum(karyotype)*Params.cancer_cell_mis_seg_rate);
+            missegregationRate =Params.cancer_cell_mis_seg_rate;
         }else{
             missegregationRate =Params.normal_cell_mis_seg_rate;//(Util.ArraySum(karyotype)*Params.natural_mis_seg_rate)/(Params.misRateWeight);
 
@@ -251,22 +281,13 @@ public class  Cell extends AgentSQ2Dunstackable<OnLatticeGrid> {
     // For colours from graphs: Util.RGB256(17, 91, 28): Util.RGB256(132, 18, 10)
     // For red/blue combination: Util.RGB256(26, 133, 255): Util.RGB256(212, 17, 89))
     void Draw(){
-       // @TODO MODIFY CODE TO DRAW EACH KARYOTYPE
-        //G.vis.SetPix(Isq(), Util.HeatMapJet(hash,-999999999,999999999));//sets a single pixel
-        G.vis.SetPix(Isq(), (!cancerous) ? Util.RGB256(0, 0, 255) : Util.RGB256(216, 27, 96));
-//        G.vis.SetPix(Isq(), (resistance==0)? Util.CategorialColor(13): Util.CategorialColor(11));//sets a single pixel
-
-       // G.vis.SetPix(Isq(), Util.CategorialColor(karyotype));//sets a single pixel
-//        G.vis.SetPix(Isq(), (resistance==0)? Util.CategorialColor(13): Util.CategorialColor(11));//sets a single pixel
-
-
-        //G.vis.SetPix(Isq(), (resistance==0)? Util.RGB256(117, 197, 114): Util.RGB256(216, 27, 96));//sets a single pixel
-//        G.vis.SetPix(Isq(), (resistance==0)? Util.CategorialColor(13): Util.CategorialColor(11));//sets a single pixel
+        if (!cancerous) {
+            G.vis.SetPix(Isq(), HAL.Util.RGB256(0, 0, 255));   // normal: blue
+        } else {
+            // cancer: color by karyotype identity
+            G.vis.SetPix(Isq(), G.colorForKaryotypeHash(hash));
+        }
     }
-   //void DrawPloidy(){
-    //G.vis.SetPix(Isq(), (==0)? Util.RGB256(51, 153, 255): Util.RGB256(255, 204, 0));//sets a single pixel
-//        G.vis.SetPix(Isq(), (resistance==0)? Util.CategorialColor(13): Util.CategorialColor(11));//sets a single pixel
-    //}
 
 }
 

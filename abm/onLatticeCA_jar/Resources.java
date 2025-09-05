@@ -77,13 +77,13 @@ public class Resources {
 
     public double setDirechletCond() {
         // advisable to limit Courant number to 0.2/
-        double timescalar = 0.2/non_dim_diff_rate;
+        double timescalar = .2/non_dim_diff_rate;
         pdegrid2d.DiffusionADI(non_dim_diff_rate*timescalar);
         for(Cell c:onlatticeGrid){
             c.Consumption(timescalar);
         }
-        for (int[] vessel : vessels) {
-            pdegrid2d.Set(vessel[0], vessel[1], Params.vssl_bdary_value);
+        for (int I : vessel_indices) {
+            pdegrid2d.Set(I, Params.vssl_bdary_value);
         }
          maximum_delta = pdegrid2d.MaxDeltaScaled(0.);
         pdegrid2d.Update();
@@ -91,7 +91,18 @@ public class Resources {
     }
 
 
+    public double relaxUntil(double tol, int maxSubsteps) {
+        double simTime = 0;
+        int steps = 0;
+        maximum_delta = Double.NaN;
+        do {
+            simTime += setDirechletCond();
+        } while ((!Double.isFinite(maximum_delta) || maximum_delta > tol)
+                && ++steps < maxSubsteps);
+        return simTime;
+    }
 
 
 
 }
+

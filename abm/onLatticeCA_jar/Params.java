@@ -133,7 +133,7 @@ public class Params {
 
     //Load parameters
     public void parameter(String path2Parameters) {
-        File parameters = new File(OnLatticeGrid.mainDir.concat(path2Parameters));
+        
         FileReader file;
 
         {

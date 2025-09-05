@@ -4,7 +4,7 @@ import java.util.*;
 public class homeostasisTests {
     // We may wish to pass in the following 2 parameters via params file.
     int winsize =20;
-    double criticalValue = 1.;
+    double criticalValue = 2.;
 
     boolean homeostasisReached = false;
     List<Double> o2List;

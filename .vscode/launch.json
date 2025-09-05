@@ -1,0 +1,414 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "BasicCellularAutomata",
+            "request": "launch",
+            "mainClass": "Examples.BasicCellularAutomata.BasicCellularAutomata",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ChemotaxisModel",
+            "request": "launch",
+            "mainClass": "Examples.Chemotaxis.ChemotaxisModel",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleModelInteractive",
+            "request": "launch",
+            "mainClass": "Examples.ClinicianSim.ExampleModelInteractive",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ColorBarGenerator",
+            "request": "launch",
+            "mainClass": "Examples.ColorBarGenerator.ColorBarGenerator",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "GOLGrid",
+            "request": "launch",
+            "mainClass": "Examples.GameOfLife.GOLGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "GOLSweepEx",
+            "request": "launch",
+            "mainClass": "Examples.GameOfLife.GOLSweepEx",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Gas",
+            "request": "launch",
+            "mainClass": "Examples.GasParticles.Gas",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Part1Visualization",
+            "request": "launch",
+            "mainClass": "Examples.Lesson.Part1Visualization",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "DivisionDeathMutation",
+            "request": "launch",
+            "mainClass": "Examples.ModuleSetExample.DivisionDeathMutation",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "TumorGrowth",
+            "request": "launch",
+            "mainClass": "Examples.ODEmodel.TumorGrowth",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "MultiOutbreak",
+            "request": "launch",
+            "mainClass": "Examples.Outbreak.MultiOutbreak",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "OutbreakWorld",
+            "request": "launch",
+            "mainClass": "Examples.Outbreak.OutbreakWorld",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PersianCarpets",
+            "request": "launch",
+            "mainClass": "Examples.PersianModel.PersianCarpets",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PhylogenyModel",
+            "request": "launch",
+            "mainClass": "Examples.PhylogenyTracker.PhylogenyModel",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PopTumor",
+            "request": "launch",
+            "mainClass": "Examples.PopulationTumor.PopTumor",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "TemplateMultiGrid",
+            "request": "launch",
+            "mainClass": "Examples.Template_Models.TemplateMultiGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "TemplateOffLattice2D",
+            "request": "launch",
+            "mainClass": "Examples.Template_Models.TemplateOffLattice2D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "TemplateOnLattice2D",
+            "request": "launch",
+            "mainClass": "Examples.Template_Models.TemplateOnLattice2D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "DivisionDeathMutation(1)",
+            "request": "launch",
+            "mainClass": "Examples._1DivisionDeathMutation.DivisionDeathMutation",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "StemCellCA",
+            "request": "launch",
+            "mainClass": "Examples._2StemCellExample.StemCellCA",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleOffLattice",
+            "request": "launch",
+            "mainClass": "Examples._3OffLatticeExample.ExampleOffLattice",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PDEexample",
+            "request": "launch",
+            "mainClass": "Examples._4PDEexample.PDEexample",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Example3D",
+            "request": "launch",
+            "mainClass": "Examples._5Example3D.Example3D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleModel",
+            "request": "launch",
+            "mainClass": "Examples._6CompetitiveRelease.ExampleModel",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "BoolSet",
+            "request": "launch",
+            "mainClass": "HAL.Tools.BoolSet",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "BirthDeath",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.BirthDeath",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Mover3D",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.Mover3D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "MultiwellExample",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.MultiwellExample",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PopGrid",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.PopGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "SaveLoadModel",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.SaveLoadModel",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "mover3DoffLattice",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Agents.mover3DoffLattice",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "DiffusionAdvection3D",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Diffusbiles.DiffusionAdvection3D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Gradient2D",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Diffusbiles.Gradient2D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Gradient3D",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Diffusbiles.Gradient3D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ReactionDiffusion2D",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Diffusbiles.ReactionDiffusion2D",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.OffLatticeModel.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "BinomialTest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.BinomialTest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ColorInterpolation",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.ColorInterpolation",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ColorTest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.ColorTest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "FileIOTest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.FileIOTest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "GIFtest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.GIFtest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "GuiExample",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.GuiExample",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "HeatMaps",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.HeatMaps",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "LineSegmentTest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.LineSegmentTest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PNGexample",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.PNGexample",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PlotExample",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.PlotExample",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "Vis3Dtest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.Vis3Dtest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "yCbCrTest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Other.yCbCrTest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(1)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.Example.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(2)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.FileIOexample.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(3)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.MultithreadExample.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleModel(1)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.NonSpatialPopModel.ExampleModel",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(4)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.OnLatticeExample.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(5)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.PDEexample.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "PETest",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.PopulationModel.PETest",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "ExampleGrid(6)",
+            "request": "launch",
+            "mainClass": "LEARN_HERE.Tutorials.SphereAgents.ExampleGrid",
+            "projectName": "ABM_ploidy_fdb0c4da"
+        },
+        {
+            "type": "java",
+            "name": "OnLatticeGrid",
+            "request": "launch",
+            "mainClass": "onLatticeCA_jar.OnLatticeGrid",
+            "projectName": "ABM_ploidy_fdb0c4da",
+            "args": "input/parameters.txt data"
+        }
+    ]
+}
